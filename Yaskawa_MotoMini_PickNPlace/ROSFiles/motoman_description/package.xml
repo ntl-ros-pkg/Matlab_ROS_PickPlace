@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>motoman_description</name>
+  <version>0.2.0</version>
+  <description>The motoman_description package</description>
+
+  <maintainer email="groadpg@gmail.com">Ryodo Tanaka</maintainer>
+  <license>BSD</license>
+  
+  <url type="repository">http://github.com/ntl-ros-pkg/motoman_robot</url>
+
+  <author email="groadpg@gmail.com">RyodoTanaka</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roslaunch</build_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>rviz</exec_depend>
+  <exec_depend>xacro</exec_depend>
+
+</package>

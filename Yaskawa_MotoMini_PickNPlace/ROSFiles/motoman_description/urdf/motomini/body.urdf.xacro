@@ -1,0 +1,84 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <property name="sum_rate" value="${base_rate 
+                                      + s_rate + l_rate
+                                      + u_rate + r_rate
+                                      + b_rate + t_rate}" />
+
+  <xacro:macro name="link_v0" params="link_name color">
+    <link name="${link_name}">
+      <visual>
+        <geometry>
+          <mesh filename="package://motoman_description/meshes/motomini/visual/${link_name}.stl"/>
+        </geometry>
+        <material name="${color}"/>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://motoman_description/meshes/motomini/collision/${link_name}.stl"/>
+        </geometry>
+      </collision>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="link_cylinder_v0" params="link_name mass radius height
+                                               origin_xyz origin_rpy">
+    <link name="${link_name}">
+      <visual>
+        <geometry>
+          <mesh filename="package://motoman_description/meshes/motomini/visual/${link_name}.stl"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://motoman_description/meshes/motomini/collision/${link_name}.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+	<origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+        <mass value="${mass}"/>
+        <inertia ixx="${mass*((radius*radius)/4+(height*height)/12)}" ixy="0" ixz="0"
+				 iyy="${mass*((radius*radius)/4+(height*height)/12)}" iyz="0"
+				 izz="${(mass*radius*radius)/2}" />
+      </inertial>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="link_box_v0" params="link_name mass width depth height
+                                          origin_xyz origin_rpy color">
+    <link name="${link_name}">
+      <visual>
+        <geometry>
+          <mesh filename="package://motoman_description/meshes/motomini/visual/${link_name}.stl"/>
+        </geometry>
+        <material name="${color}"/>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://motoman_description/meshes/motomini/collision/${link_name}.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+	<origin xyz="${origin_xyz}" rpy="${origin_rpy}"/>
+        <mass value="${mass}"/>
+        <inertia ixx="${(mass*((width/2)*(width/2)+(height/2)*(height/2)))/3}" ixy="0" ixz="0"
+				 iyy="${(mass*((depth/2)*(depth/2)+(height/2)*(height/2)))/3}" iyz="0"
+				 izz="${(mass*((depth/2)*(depth/2)+(width/2)*(width/2)))/3}" />
+      </inertial>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="joint_v0" params="joint_name parent_link_name child_link_name
+                                       origin_xyz origin_rpy axis_xyz
+                                       llimit ulimit elimit vlimit">
+      <joint name="${joint_name}" type="revolute">
+      <parent link="${parent_link_name}"/>
+      <child link="${child_link_name}"/>
+      <origin xyz="${origin_xyz}" rpy="${origin_rpy}" />
+      <axis xyz="${axis_xyz}" />
+      <limit lower="${llimit}" upper="${ulimit}" effort="${elimit}" velocity="${vlimit}"/>
+    </joint>
+  </xacro:macro>
+
+</robot>
+

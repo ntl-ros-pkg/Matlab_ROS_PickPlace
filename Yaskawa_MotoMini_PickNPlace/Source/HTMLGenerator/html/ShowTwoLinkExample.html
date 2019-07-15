@@ -1,0 +1,306 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>ShowTwoLinkExample</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-08-15"><meta name="DC.source" content="ShowTwoLinkExample.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Define robot constant parameters</a></li><li><a href="#3">Create robot main structure</a></li><li><a href="#4">Create joint and link 1</a></li><li><a href="#5">Create joint and link 2</a></li><li><a href="#6">Create joint and link 3</a></li><li><a href="#7">Create joint and link 4 (end effector)</a></li><li><a href="#8">Show details of kinematic chain</a></li><li><a href="#9">Show figure of robot in its home configuration</a></li><li><a href="#10">Calculate Forward Kinematics</a></li><li><a href="#11">Configure Inverse Kinematics</a></li><li><a href="#12">Solve Inverse Kinematics</a></li></ul></div><pre class="codeinput"><span class="comment">% Show example of creating a Three link manipulator in MATLAB</span>
+</pre><h2 id="2">Define robot constant parameters</h2><pre class="codeinput">ThreeLinkRobot.l1 = 0.3;
+ThreeLinkRobot.l2 = 0.2;
+ThreeLinkRobot.l3 = 0.1;
+</pre><h2 id="3">Create robot main structure</h2><pre class="codeinput">robot = robotics.RigidBodyTree()
+</pre><pre class="codeoutput">
+robot = 
+
+  RigidBodyTree with properties:
+
+    NumBodies: 0
+       Bodies: {}
+         Base: [1&times;1 robotics.FixedBase]
+    BodyNames: {}
+     BaseName: 'base'
+
+</pre><h2 id="4">Create joint and link 1</h2><pre class="codeinput">jnt1 = robotics.Joint(<span class="string">'jnt1'</span>,<span class="string">'revolute'</span>)
+jnt1.PositionLimits = deg2rad([-180, 180]);
+jnt1.setFixedTransform([eye(3),[0;0;0];[0 0 0 1]]);
+jnt1.JointAxis = [0 1 0];
+link1 = robotics.RigidBody(<span class="string">'L1'</span>);
+link1.Joint = jnt1;
+
+robot.addBody(link1, <span class="string">'base'</span>);
+</pre><pre class="codeoutput">
+jnt1 = 
+
+  Joint with properties:
+
+                      Type: 'revolute'
+                      Name: 'jnt1'
+                 JointAxis: [0 0 1]
+            PositionLimits: [-3.1416 3.1416]
+              HomePosition: 0
+    JointToParentTransform: [4&times;4 double]
+     ChildToJointTransform: [4&times;4 double]
+
+</pre><h2 id="5">Create joint and link 2</h2><pre class="codeinput">jnt2 = robotics.Joint(<span class="string">'jnt2'</span>,<span class="string">'revolute'</span>);
+jnt2.PositionLimits = deg2rad([0, 180]);
+jnt2.setFixedTransform([eye(3),[ThreeLinkRobot.l1;0;0];[0 0 0 1]]);
+jnt2.JointAxis = [0 1 0];
+link2 = robotics.RigidBody(<span class="string">'L2'</span>);
+link2.Joint = jnt2;
+
+robot.addBody(link2, <span class="string">'L1'</span>);
+</pre><h2 id="6">Create joint and link 3</h2><pre class="codeinput">jnt3 = robotics.Joint(<span class="string">'jnt3'</span>,<span class="string">'revolute'</span>);
+jnt3.PositionLimits = deg2rad([-130, 130]);
+jnt3.setFixedTransform([eye(3),[ThreeLinkRobot.l2;0;0];[0 0 0 1]]);
+jnt3.JointAxis = [0 1 0];
+link3 = robotics.RigidBody(<span class="string">'L3'</span>);
+link3.Joint = jnt3;
+
+robot.addBody(link3, <span class="string">'L2'</span>);
+</pre><h2 id="7">Create joint and link 4 (end effector)</h2><pre class="codeinput">jnt4 = robotics.Joint(<span class="string">'jnt4'</span>,<span class="string">'fixed'</span>);
+jnt4.setFixedTransform([eye(3),[ThreeLinkRobot.l3;0;0];[0 0 0 1]]);
+link4 = robotics.RigidBody(<span class="string">'L4'</span>);
+link4.Joint = jnt4;
+
+robot.addBody(link4, <span class="string">'L3'</span>);
+</pre><h2 id="8">Show details of kinematic chain</h2><pre class="codeinput">showdetails(robot);
+</pre><pre class="codeoutput">--------------------
+Robot: (4 bodies)
+
+ Idx    Body Name   Joint Name   Joint Type    Parent Name(Idx)   Children Name(s)
+ ---    ---------   ----------   ----------    ----------------   ----------------
+   1           L1         jnt1     revolute             base(0)   L2(2)  
+   2           L2         jnt2     revolute               L1(1)   L3(3)  
+   3           L3         jnt3     revolute               L2(2)   L4(4)  
+   4           L4         jnt4        fixed               L3(3)   
+--------------------
+</pre><h2 id="9">Show figure of robot in its home configuration</h2><pre class="codeinput">Qhome = robot.homeConfiguration
+qHome = [Qhome.JointPosition]
+show(robot, Qhome);
+</pre><pre class="codeoutput">
+Qhome = 
+
+  1&times;3 struct array with fields:
+
+    JointName
+    JointPosition
+
+
+qHome =
+
+     0     0     0
+
+</pre><img vspace="5" hspace="5" src="ShowTwoLinkExample_01.png" style="width:560px;height:420px;" alt=""> <h2 id="10">Calculate Forward Kinematics</h2><pre class="codeinput">Q = robot.randomConfiguration();
+q = [Q.JointPosition]
+show(robot, Q);
+T = getTransform(robot, Q, <span class="string">'L4'</span>)
+J = geometricJacobian(robot, Q, <span class="string">'L4'</span>)
+</pre><pre class="codeoutput">
+q =
+
+   -2.7093    1.0041    0.1401
+
+
+T =
+
+    0.0056         0   -1.0000   -0.2986
+         0    1.0000         0         0
+    1.0000         0    0.0056    0.4239
+         0         0         0    1.0000
+
+
+J =
+
+         0         0         0
+    1.0000    1.0000    1.0000
+         0         0         0
+    0.4239    0.2982    0.1000
+         0         0         0
+    0.2986    0.0262   -0.0006
+
+</pre><img vspace="5" hspace="5" src="ShowTwoLinkExample_02.png" style="width:560px;height:420px;" alt=""> <h2 id="11">Configure Inverse Kinematics</h2><pre class="codeinput">ik = robotics.InverseKinematics(<span class="string">'RigidBodyTree'</span>, robot);
+weights = [1 1 1 1 1 1];
+ikInitialGuess = robot.homeConfiguration;
+q = [ pi/2 pi/2 pi/2];
+ikInitialGuess = arrayfun(@(x,y) setfield(x, <span class="string">'JointPosition'</span>, y), ikInitialGuess, q);
+<span class="comment">% Set end effector pose</span>
+Tee = eul2tform([0 pi/4 0]);
+Tee(1:3,4) = [0 0 0.5*(ThreeLinkRobot.l1+ThreeLinkRobot.l2+ThreeLinkRobot.l3)];
+</pre><h2 id="12">Solve Inverse Kinematics</h2><pre class="codeinput">[QSol, SolInfo] = step(ik, <span class="string">'L4'</span>, Tee, weights, ikInitialGuess);
+show(robot, QSol);
+qSol = [QSol.JointPosition]'
+<span class="comment">% Verify solution</span>
+Tik = getTransform(robot, QSol, <span class="string">'L4'</span>)
+</pre><pre class="codeoutput">
+qSol =
+
+   -2.3145
+    1.4671
+    1.6328
+
+
+Tik =
+
+    0.7071         0    0.7071   -0.0000
+         0    1.0000         0         0
+   -0.7071         0    0.7071    0.3000
+         0         0         0    1.0000
+
+</pre><img vspace="5" hspace="5" src="ShowTwoLinkExample_03.png" style="width:560px;height:420px;" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+% Show example of creating a Three link manipulator in MATLAB
+
+%% Define robot constant parameters
+ThreeLinkRobot.l1 = 0.3;
+ThreeLinkRobot.l2 = 0.2;
+ThreeLinkRobot.l3 = 0.1;
+
+
+%% Create robot main structure
+robot = robotics.RigidBodyTree()
+
+
+%% Create joint and link 1
+jnt1 = robotics.Joint('jnt1','revolute')
+jnt1.PositionLimits = deg2rad([-180, 180]);
+jnt1.setFixedTransform([eye(3),[0;0;0];[0 0 0 1]]);
+jnt1.JointAxis = [0 1 0];
+link1 = robotics.RigidBody('L1');
+link1.Joint = jnt1;
+
+robot.addBody(link1, 'base');
+
+
+%% Create joint and link 2
+jnt2 = robotics.Joint('jnt2','revolute');
+jnt2.PositionLimits = deg2rad([0, 180]);
+jnt2.setFixedTransform([eye(3),[ThreeLinkRobot.l1;0;0];[0 0 0 1]]);
+jnt2.JointAxis = [0 1 0];
+link2 = robotics.RigidBody('L2');
+link2.Joint = jnt2;
+
+robot.addBody(link2, 'L1');
+
+
+%% Create joint and link 3
+jnt3 = robotics.Joint('jnt3','revolute');
+jnt3.PositionLimits = deg2rad([-130, 130]);
+jnt3.setFixedTransform([eye(3),[ThreeLinkRobot.l2;0;0];[0 0 0 1]]);
+jnt3.JointAxis = [0 1 0];
+link3 = robotics.RigidBody('L3');
+link3.Joint = jnt3;
+
+robot.addBody(link3, 'L2');
+
+
+%% Create joint and link 4 (end effector)
+jnt4 = robotics.Joint('jnt4','fixed');
+jnt4.setFixedTransform([eye(3),[ThreeLinkRobot.l3;0;0];[0 0 0 1]]);
+link4 = robotics.RigidBody('L4');
+link4.Joint = jnt4;
+
+robot.addBody(link4, 'L3');
+
+
+%% Show details of kinematic chain
+showdetails(robot);
+
+
+%% Show figure of robot in its home configuration
+Qhome = robot.homeConfiguration
+qHome = [Qhome.JointPosition]
+show(robot, Qhome);
+
+
+%% Calculate Forward Kinematics
+Q = robot.randomConfiguration();
+q = [Q.JointPosition]
+show(robot, Q);
+T = getTransform(robot, Q, 'L4')
+J = geometricJacobian(robot, Q, 'L4')
+
+
+%% Configure Inverse Kinematics 
+ik = robotics.InverseKinematics('RigidBodyTree', robot);
+weights = [1 1 1 1 1 1];
+ikInitialGuess = robot.homeConfiguration;
+q = [ pi/2 pi/2 pi/2];
+ikInitialGuess = arrayfun(@(x,y) setfield(x, 'JointPosition', y), ikInitialGuess, q);
+% Set end effector pose
+Tee = eul2tform([0 pi/4 0]);
+Tee(1:3,4) = [0 0 0.5*(ThreeLinkRobot.l1+ThreeLinkRobot.l2+ThreeLinkRobot.l3)]; 
+
+
+%% Solve Inverse Kinematics
+[QSol, SolInfo] = step(ik, 'L4', Tee, weights, ikInitialGuess);
+show(robot, QSol);
+qSol = [QSol.JointPosition]'
+% Verify solution
+Tik = getTransform(robot, QSol, 'L4')
+ 
+ 
+ 
+##### SOURCE END #####
+--></body></html>

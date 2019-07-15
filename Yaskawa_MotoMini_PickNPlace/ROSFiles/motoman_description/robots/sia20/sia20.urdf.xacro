@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<robot name="sia20" xmlns:xacro="http://ros.org/wiki/xacro">
+  <!-- File Include -->
+  <xacro:include filename="$(find motoman_description)/robots/sia20/sia20_basic.urdf.xacro" />
+
+  <link name="world"/>
+  <joint name="world_to_base_link" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+  </joint>
+  
+</robot>

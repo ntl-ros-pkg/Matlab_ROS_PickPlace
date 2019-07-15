@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find motoman_description)/urdf/sia20/base_link/base_link.gazebo.xacro"/>
+
+  <xacro:macro name="base_link_v0">
+    <link name="base_link">
+      <visual>
+        <origin rpy="${M_PI/2} 0 0"/>
+        <geometry>
+          <mesh filename="package://motoman_description/meshes/sia20/base_link/visual.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="${M_PI/2} 0 0"/>
+        <geometry>
+          <mesh filename="package://motoman_description/meshes/sia20/base_link/collision.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <xacro:box_inertial mass="30" height="0.34" width="0.175" depth="0.28">
+          <origin xyz="0 0 ${0.28/2}" rpy="${M_PI/2} 0 0"/>
+        </xacro:box_inertial>
+      </inertial>
+    </link>
+
+    <xacro:base_link_gazebo_v0/>
+    
+  </xacro:macro>  
+
+</robot>
+
+
+
+
+
+
