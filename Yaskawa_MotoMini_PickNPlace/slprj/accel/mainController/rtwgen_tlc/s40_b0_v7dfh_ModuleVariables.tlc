@@ -1,0 +1,12 @@
+%implements s40_b0_v7dfh_ModuleVariables "C"
+
+%function ModuleVariables(block) Output
+
+static int32_T firstRow = 0;
+static int32_T idxROI = 0;
+static int32_T numShape = 0;
+static void *tmp = NULL;
+static uint8_T *tmp_1 = NULL;
+static real_T u = 0.0;
+static real_T v = 0.0;
+%endfunction

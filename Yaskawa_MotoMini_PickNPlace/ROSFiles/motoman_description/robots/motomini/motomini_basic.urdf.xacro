@@ -1,0 +1,147 @@
+<?xml version="1.0" ?>
+<robot name="motomini" xmlns:xacro="http://ros.org/wiki/xacro">
+  <!-- File Include -->
+  <xacro:include filename="$(find motoman_description)/urdf/common.xacro"/>
+  <xacro:include filename="$(find motoman_description)/urdf/materials.xacro"/>
+  <xacro:include filename="$(find motoman_description)/urdf/motomini/body.urdf.xacro"/>
+  <xacro:include filename="$(find motoman_description)/urdf/motomini/body.transmission.xacro"/>
+  <xacro:include filename="$(find motoman_description)/urdf/motomini/body.gazebo.xacro"/>
+
+  <!-- Configuration -->
+  <xacro:macro name="motoman_motomini" params="prefix"> 
+    <property name="whole_mass" value="7.00" />
+    <property name="base_link_volume" value="0.00030" />
+    <property name="link_1_s_volume"  value="0.00030" />
+    <property name="link_2_l_volume"  value="0.00030" />
+    <property name="link_3_u_volume"  value="0.00010" />
+    <property name="link_4_r_volume"  value="0.00010" />
+    <property name="link_5_b_volume"  value="0.00010" />
+    <property name="link_6_t_volume"  value="0.00013" />
+    <property name="sum_volume" value="${base_link_volume
+                                       + link_1_s_volume  + link_2_l_volume
+                                       + link_3_u_volume  + link_4_r_volume
+                                       + link_5_b_volume  + link_6_t_volume}" />
+
+    <!-- Add macro -->
+    <xacro:macro name="add_world" params="*origin">
+      <link name="world"/>
+      <joint name="world" type="fixed">
+        <insert_block name="origin"/>
+        <parent link="world"/>
+        <child link="base_link"/>
+      </joint>
+    </xacro:macro>
+
+    <!-- link list -->
+    <!--
+    <xacro:link_v0 link_name="${prefix}base_link" color="yaskawa_blue" />
+    <xacro:link_v0 link_name="${prefix}link_1_s" color="yaskawa_blue" />
+    <xacro:link_v0 link_name="${prefix}link_2_l" color="yaskawa_blue" />
+    <xacro:link_v0 link_name="${prefix}link_3_u" color="yaskawa_blue" />
+    <xacro:link_v0 link_name="${prefix}link_4_r" color="yaskawa_blue" />
+    <xacro:link_v0 link_name="${prefix}link_5_b" color="yaskawa_blue" />
+    <xacro:link_v0 link_name="${prefix}link_6_t" color="yaskawa_blue" />
+    -->
+    <!--
+    -->
+    <xacro:link_box_v0 link_name="${prefix}base_link" mass="${whole_mass*base_link_volume/sum_volume}"
+        width="0.124" depth="0.2246" height="0.1005"
+        origin_xyz="0 0 0" origin_rpy="0 0 0" color="yaskawa_blue" />
+    <xacro:link_box_v0 link_name="${prefix}link_1_s" mass="${whole_mass*link_1_s_volume/sum_volume}"
+        width="0.119" depth="0.1205" height="0.1435"
+        origin_xyz="0 0 0" origin_rpy="0 0 0" color="yaskawa_blue"/>
+    <xacro:link_box_v0 link_name="${prefix}link_2_l" mass="${whole_mass*link_2_l_volume/sum_volume}"
+        width="0.1072" depth="0.2430" height="0.1338"
+        origin_xyz="0 0 0" origin_rpy="0 0 0" color="yaskawa_blue"/>
+    <xacro:link_box_v0 link_name="${prefix}link_3_u" mass="${whole_mass*link_3_u_volume/sum_volume}"
+        width="0.0730" depth="0.1078" height="0.0855"
+        origin_xyz="0 0 0" origin_rpy="0 0 0" color="yaskawa_blue"/>
+    <xacro:link_box_v0 link_name="${prefix}link_4_r" mass="${whole_mass*link_4_r_volume/sum_volume}"
+        width="0.0943" depth="0.0930" height="0.1885"
+        origin_xyz="0 0 0" origin_rpy="0 0 0" color="yaskawa_blue"/>
+    <xacro:link_box_v0 link_name="${prefix}link_5_b" mass="${whole_mass*link_5_b_volume/sum_volume}"
+        width="0.0700" depth="0.0797" height="0.0571"
+        origin_xyz="0 0 0" origin_rpy="0 0 0" color="yaskawa_blue"/>
+    <xacro:link_box_v0 link_name="${prefix}link_6_t" mass="${whole_mass*link_6_t_volume/sum_volume}"
+        width="0.0300" depth="0.0300" height="0.0190" 
+        origin_xyz="0 0 0" origin_rpy="0 0 0" color="yaskawa_blue"/>
+    <link name="tool0"/>
+    <!-- end of link list -->
+
+    <!-- joint list -->
+    <xacro:joint_v0 joint_name="${prefix}joint_1_s"
+      parent_link_name="${prefix}base_link" child_link_name="${prefix}link_1_s"
+      origin_xyz="0 0 0.103" origin_rpy="0 0 0" axis_xyz="0 0 1"
+      llimit="-2.9670" ulimit="2.9670" elimit="0.12" vlimit="5.4977" /> 
+    <xacro:joint_v0 joint_name="${prefix}joint_2_l"
+      parent_link_name="${prefix}link_1_s" child_link_name="${prefix}link_2_l"
+      origin_xyz="0.020 0 0" origin_rpy="0 0 0" axis_xyz="0 1 0"
+      llimit="-1.4835" ulimit="1.5707" elimit="0.12" vlimit="5.4977" /> 
+    <xacro:joint_v0 joint_name="${prefix}joint_3_u"
+      parent_link_name="${prefix}link_2_l" child_link_name="${prefix}link_3_u"
+      origin_xyz="0 0 0.165" origin_rpy="0 0 0" axis_xyz="0 -1 0"
+      llimit="-0.8726" ulimit="1.5707" elimit="0.12" vlimit="7.3304" /> 
+    <xacro:joint_v0 joint_name="${prefix}joint_4_r"
+      parent_link_name="${prefix}link_3_u" child_link_name="${prefix}link_4_r"
+      origin_xyz="0.165 0 0" origin_rpy="0 0 0" axis_xyz="-1 0 0"
+      llimit="-2.4434" ulimit="2.4434" elimit="0.07" vlimit="10.4719" /> 
+    <xacro:joint_v0 joint_name="${prefix}joint_5_b"
+      parent_link_name="${prefix}link_4_r" child_link_name="${prefix}link_5_b"
+      origin_xyz="0 0 0" origin_rpy="0 0 0" axis_xyz="0 -1 0"
+      llimit="-0.5235" ulimit="3.6651" elimit="0.07" vlimit="10.4719" /> 
+    <xacro:joint_v0 joint_name="${prefix}joint_6_t"
+      parent_link_name="${prefix}link_5_b" child_link_name="${prefix}link_6_t"
+      origin_xyz="0 0 0" origin_rpy="0 0 0" axis_xyz="0 0 1"
+      llimit="-6.2831" ulimit="6.2831" elimit="0.07" vlimit="10.4719" /> 
+    <joint name="joint_6_t-tool0" type="fixed">
+      <origin xyz="0 0 -0.040 " rpy="${pi} 0 0"/>
+      <parent link="link_6_t"/>
+      <child link="tool0"/>
+    </joint>
+    <!-- end of joint list -->
+
+    <!-- ROS base_link to Robot Manufacturer World Coordinates transform -->
+    <link name="base" />
+    <joint name="base_link-base" type="fixed">
+      <origin xyz="0 0 0.103" rpy="0 0 0"/>
+      <parent link="base_link"/>
+      <child link="base"/>
+    </joint>
+
+    <!-- transmission -->
+    <xacro:simple_jp_trans_v0 name="transmission_1_s"
+                              joint_name="${prefix}joint_1_s" actuator_name="${prefix}motor_1_s"
+                              reduction="300"/>
+    <xacro:simple_jp_trans_v0 name="transmission_2_l"
+                              joint_name="${prefix}joint_2_l" actuator_name="${prefix}motor_2_l"
+                              reduction="300"/>
+    <xacro:simple_jp_trans_v0 name="transmission_3_u"
+                              joint_name="${prefix}joint_3_u" actuator_name="${prefix}motor_3_u"
+                              reduction="50"/>
+    <xacro:simple_jp_trans_v0 name="transmission_4_r"
+                              joint_name="${prefix}joint_4_r" actuator_name="${prefix}motor_4_r"
+                              reduction="30"/>
+    <xacro:simple_jp_trans_v0 name="transmission_5_b"
+                              joint_name="${prefix}joint_5_b" actuator_name="${prefix}motor_5_b"
+                              reduction="30"/>
+    <xacro:simple_jp_trans_v0 name="transmission_6_t"
+                              joint_name="${prefix}joint_6_t" actuator_name="${prefix}motor_6_t"
+                              reduction="10"/>
+
+    <!-- gazebo -->
+    <gazebo>
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+      </plugin>
+    </gazebo>
+    <xacro:gazebo_link_v1 name="${prefix}base_link"/>
+    <xacro:gazebo_link_v1 name="${prefix}link_1_s"/>
+    <xacro:gazebo_link_v1 name="${prefix}link_2_l"/>
+    <xacro:gazebo_link_v1 name="${prefix}link_3_u"/>
+    <xacro:gazebo_link_v1 name="${prefix}link_4_r"/>
+    <xacro:gazebo_link_v1 name="${prefix}link_5_b"/>
+    <xacro:gazebo_link_v1 name="${prefix}link_6_t"/>
+  </xacro:macro>
+
+</robot>
+

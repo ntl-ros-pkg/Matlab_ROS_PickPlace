@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find motoman_description)/urdf/sia20/link/link.gazebo.xacro"/>
+  <xacro:include filename="$(find motoman_description)/urdf/sia20/link/link.transmission.xacro"/>
+  
+  <xacro:macro name="link_v1" params="suffix
+                                      parent
+                                      mass
+                                      height
+                                      width
+                                      depth
+                                      *joint_origin
+                                      *joint_limit
+                                      *inertial_origin">
+    <link name="link_${suffix}">
+      <visual>
+        <geometry>
+          <mesh filename="package://motoman_description/meshes/sia20/link_${suffix}/visual.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://motoman_description/meshes/sia20/link_${suffix}/collision.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <xacro:box_inertial mass="${mass}" height="${height}" width="${width}" depth="${depth}">
+          <insert_block name="inertial_origin"/>
+        </xacro:box_inertial>
+      </inertial>
+    </link>
+
+    <joint name="joint_${suffix}" type="revolute">
+      <insert_block name="joint_origin"/>
+      <parent link="${parent}"/>
+      <child link="link_${suffix}"/>
+      <axis xyz="0 0 1"/>
+      <dynamics damping="0.7" friction="0.7"/>
+      <insert_block name="joint_limit"/>
+    </joint>
+
+    <xacro:link_gazebo_v1 suffix="${suffix}"/>
+
+    <xacro:link_trans_v0 suffix="${suffix}" reduction="50"/>
+    
+  </xacro:macro>
+</robot>
