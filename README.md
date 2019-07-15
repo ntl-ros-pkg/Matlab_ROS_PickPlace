@@ -1,6 +1,8 @@
 # Matlab_ROS_PickPlace
 Pick &amp; Place application by integrating Matlab &amp; ROS
 
+![Overview](./.img/overview.jpg "Overview")
+
 ## Usage
 1. Turn off all anti-virus software and firewalls before running
 2. Install ROS Kinetic Kame + Gazebo v7 on Ubuntu Linux 16.04 (or VMware etc)
